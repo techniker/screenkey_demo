@@ -1,5 +1,5 @@
 //# Copyright (c) 2010, Bjoern Heller <tec@hellercom.de>. All rights reserved
-//# This code is licensed under GNU/ GP
+//# This code is licensed under GNU/ GPL
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -10,13 +10,14 @@ volatile uint16_t bits;
 volatile uint8_t cnt;
 volatile uint16_t fcnt=0;
 
-// This file is designed to be used on an atmega 640, running @ 16mhz,
+// This file is designed to be used on an atmega 328, running @ 16mhz,
 // but should be portable to other processors
 // Pin assignments are:
 // 	PB7 - Button input [button drives pin low]
 // 	PB1 - Data - Arduino PIN 10 - Arduino PIN 9
 // 	PB0 - Clock - Arduino PIN 10
 
+//IMAGES
 
 uint8_t start_img[108] = {
 	0xff, 0xff, 0xff, 0xff, 
@@ -75,7 +76,7 @@ uint8_t stop_img[108] = {
 
 //---------------------------------------------
 
-
+//Interrupt service routine
 ISR(TIMER1_OVF_vect){
   fcnt++;
   TCNT1 = 65536-80;
@@ -225,7 +226,7 @@ int main()
 	TCCR1B = 0x01;
 	TCCR1C = 0x0;
 
-	sei(); //global interrupt enable
+	sei(); //Global interrupt enable
 
 	// Setup the control registers
 	screenkey_reg_1(0xEE, 0x00);
@@ -273,14 +274,14 @@ int main()
 				{
                                 
 					screenkey_set_color(BR_RED);
-					screenkey_write_img(start_img);
+					//screenkey_write_img(start_img);
                                         br_dim = 1;
 				}
 			if (! (fcnt & 0x8000)) //8
 				if (br_dim)
 				{
-					screenkey_set_color(BR_BLUE);
-                                        screenkey_write_img(stop_img);
+					screenkey_set_color(BR_RED);
+					//screenkey_write_img(stop_img);
 					br_dim = 0;
 				}
 		}
